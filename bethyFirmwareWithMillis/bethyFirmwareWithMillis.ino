@@ -13,8 +13,10 @@ uint8_t ENColor = 10;
 uint8_t FLTColor = 7;
 
 uint8_t LastButton = 0;
-const char* ButtonMessage[] = { "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10", "b11" };
+const char* ButtonMessage[] = { "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "FLTBW", "FLTColor" };
 uint16_t RESET_DELAY = 1000;
+uint8_t ButtonArray[] = {Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, FLTBW, FLTColor};
+uint8_t ButtonArrayValues[11] = {0,0,0,0,0,0,0,0,0,0,0};
 
 long previousMillis = 0;  // храним время последнего переключения светодиода
 unsigned long resettingInterval = 0;
@@ -29,17 +31,17 @@ void setup() {
   digitalWrite(ENBW, HIGH);
   digitalWrite(ENColor, HIGH);
 
-  attachInterrupt(digitalPinToInterrupt(Button1), InterruptReactButton1, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Button2), InterruptReactButton2, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Button3), InterruptReactButton3, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Button4), InterruptReactButton4, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Button5), InterruptReactButton5, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Button6), InterruptReactButton6, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Button7), InterruptReactButton7, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Button8), InterruptReactButton8, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Button9), InterruptReactButton9, FALLING);
-  attachInterrupt(digitalPinToInterrupt(FLTBW), InterruptReactFLTBW, FALLING);
-  attachInterrupt(digitalPinToInterrupt(FLTColor), InterruptReactFLTColor, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Button1), InterruptReactButton1, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Button2), InterruptReactButton2, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Button3), InterruptReactButton3, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Button4), InterruptReactButton4, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Button5), InterruptReactButton5, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Button6), InterruptReactButton6, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Button7), InterruptReactButton7, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Button8), InterruptReactButton8, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Button9), InterruptReactButton9, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(FLTBW), InterruptReactFLTBW, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(FLTColor), InterruptReactFLTColor, FALLING);
 
   pinMode(Button1, INPUT_PULLUP);
   pinMode(Button2, INPUT_PULLUP);
@@ -58,6 +60,17 @@ void setup() {
 
 void loop() {
   unsigned long currentMillis = millis();
+
+for(uint8_t i = 0; i<sizeof(ButtonArray); i++)
+{
+  ButtonArrayValues[i] = digitalRead(ButtonArray[i]);
+}
+for(uint8_t i = 0; i<sizeof(ButtonArray); i++)
+{
+  Serial.print(ButtonArrayValues[i]);
+  Serial.print('\t');
+}
+Serial.println();
 
   if (Serial.available()) {
 
@@ -78,50 +91,50 @@ void loop() {
       input = "";
     }
   }
-  if (LastButton > 0) {
-    Serial.println(ButtonMessage[LastButton - 1]);
-    delay(100);
-  }
+  // if (LastButton > 0) {
+  //   Serial.println(ButtonMessage[LastButton - 1]);
+  //   delay(200);
+  // }
   if ((currentMillis - resettingInterval) > RESET_DELAY) {
     digitalWrite(ENColor, HIGH);
     digitalWrite(ENBW, HIGH);
   }
 
-  LastButton = 0;
+  // LastButton = 0;
 }
 
-void InterruptReactButton1() {
-  LastButton = 1;
-}
-void InterruptReactButton2() {
-  LastButton = 2;
-}
-void InterruptReactButton3() {
-  LastButton = 3;
-}
-void InterruptReactButton4() {
-  LastButton = 4;
-}
-void InterruptReactButton5() {
-  LastButton = 5;
-}
-void InterruptReactButton6() {
-  LastButton = 6;
-}
-void InterruptReactButton7() {
-  LastButton = 7;
-}
-void InterruptReactButton8() {
-  LastButton = 8;
-}
-void InterruptReactButton9() {
-  LastButton = 9;
-}
-void InterruptReactFLTBW() {
-  digitalWrite(ENBW, LOW);
-  LastButton = 10;
-}
-void InterruptReactFLTColor() {
-  digitalWrite(ENColor, LOW);
-  LastButton = 11;
-}
+// void InterruptReactButton1() {
+//   LastButton = 1;
+// }
+// void InterruptReactButton2() {
+//   LastButton = 2;
+// }
+// void InterruptReactButton3() {
+//   LastButton = 3;
+// }
+// void InterruptReactButton4() {
+//   LastButton = 4;
+// }
+// void InterruptReactButton5() {
+//   LastButton = 5;
+// }
+// void InterruptReactButton6() {
+//   LastButton = 6;
+// }
+// void InterruptReactButton7() {
+//   LastButton = 7;
+// }
+// void InterruptReactButton8() {
+//   LastButton = 8;
+// }
+// void InterruptReactButton9() {
+//   LastButton = 9;
+// }
+// void InterruptReactFLTBW() {
+//   digitalWrite(ENBW, LOW);
+//   LastButton = 10;
+// }
+// void InterruptReactFLTColor() {
+//   digitalWrite(ENColor, LOW);
+//   LastButton = 11;
+// }
